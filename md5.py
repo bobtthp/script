@@ -50,9 +50,8 @@ if __name__ == '__main__':
                 dir1 =  Md5_dict(Dict_file(file_path[0]))
                 dir2 =  Md5_dict(Dict_file(file_path[1]))
                 Compare_dict(dir1,dir2)
-                 
-    finally:
-        for File in file_path:
-            pass
-            #print Md5sum(File),File
-
+        else:         
+            File = file_path
+            print Md5sum(File[0]),File[0]
+    except Exception as e:
+        print e
