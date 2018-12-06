@@ -5,7 +5,7 @@ import os
 def Md5sum(f):
     md5 = hashlib.md5()
     if os.path.isdir(f):
-        print 'it is dir'
+        print '-warning: it is dir, please add "-d" '
     else:
         f = open(f,'rb')
         md5.update(f.read())
@@ -13,7 +13,7 @@ def Md5sum(f):
         return md5.hexdigest()
 def Dict_file(Dir):
     if not os.path.isdir(Dir):
-        print 'please add args for dir'
+        print '-warning: please add args for dir'
     else:
         file_dict = {}
         for path,dirs,fs in os.walk(Dir):
