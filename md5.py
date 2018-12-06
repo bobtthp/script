@@ -2,8 +2,6 @@
 import hashlib
 import sys
 import os
-
-
 def Md5sum(f):
     md5 = hashlib.md5()
     if os.path.isdir(f):
@@ -34,13 +32,16 @@ def Compare_dict(d1,d2):
     for f in d1:
         if f in d2:
             if d1[f][1] != d2[f][1]:
-                print d1[f][0],d1[f][1],'####### md5 != #######',d2[f][0],d2[f][1] 
+                print '-warning: different md5 for same files'
+                print d1[f][0],d1[f][1],'====>',d2[f][0],d2[f][1]
         else:
+            print '-warning: different files in dirs'
             print d1[f][0],d1[f][1]
     for f in d2:
         if f in d1:
             pass
         else:
+            print '-warning: different files in dirs'
             print d2[f][0],d2[f][1]
 if __name__ == '__main__':
     file_path = sys.argv[1:]
