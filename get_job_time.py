@@ -1,9 +1,10 @@
+# -*- coding:utf-8 -*-
 import datetime
 import os
 import time
-f = '/tmp/dc.log'
+f = '/mydata/qianxun/log/dc.log'
 def get_time(f):
-    today = datetime.datetime.today().strftime("%Y%m%d")
+    today = (datetime.datetime.today()+datetime.timedelta(days=-1)).strftime("%Y%m%d")
     start = 'batch = %s-' % today
     end = 'batch = %s-' % today
     cmd = 'sed -n "/%s/{p;:start;n;:end;/%s/{p;bstart};N;bend}" %s' % (start,end,f)
@@ -24,8 +25,17 @@ def date_fmt(str):
             minutes = minutes - 1
             seconds = seconds + 60
   
-    print '    date:',datetime.datetime.today().strftime("%Y-%m-%d")
-    print 'job cost:','%d:%d:%d' % (hours,minutes,seconds)
-
+    print '任务日期:',(datetime.datetime.today()+datetime.timedelta(days=-1)).strftime("%Y-%m-%d")
+    print '任务时长:','%d:%d:%d' % (hours,minutes,seconds)
+def get_file_update():
+    file_path = '/mydata/voice/'
+    today_dir = file_path + datetime.datetime.today().strftime("%Y_%m_%d")
+    yestoday_dir = file_path + (datetime.datetime.today()+datetime.timedelta(days=-1)).strftime("%Y_%m_%d")
+    before_yestoday_dir = file_path + (datetime.datetime.today()+datetime.timedelta(days=-2)).strftime("%Y_%m_%d")
+    print os.popen('du -sh ' + yestoday_dir).readlines()[0].replace('\t',': ').replace('\n','')
+    print os.popen('du -sh ' + before_yestoday_dir).readlines()[0].replace('\t',': ').replace('\n','')
 if __name__ == "__main__":
+    print '====任务监控===='
     date_fmt(get_time(f))
+    print '====容量监控===='
+    get_file_update()
