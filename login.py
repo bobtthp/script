@@ -9,8 +9,8 @@ def Login(func):
 	"""
     def wraper(jira_id,comment):
         data = {
-            'os_username': 'gaozequn',
-            'os_password': 'gaozequn'
+            'os_username': 'bobtthp',
+            'os_password': 'bobtthp'
         }
         login_url = 'http://xxx:xx/login.jsp'
         headers = {
