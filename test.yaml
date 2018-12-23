@@ -1,0 +1,8 @@
+version: '1.0'
+service:
+    db:
+        image: mysql
+        networks: host
+    redis:
+        image: redis
+        port: 6379
