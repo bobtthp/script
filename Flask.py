@@ -1,6 +1,7 @@
 from flask import Flask
 
-app=Flask(__name__)
+app=Flask(__name__,template_folder='../static/html')
+app.debug = True
 
 @app.route('/')
 def hello():

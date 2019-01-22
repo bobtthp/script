@@ -1,8 +1,5 @@
-version: '1.0'
+version: v2.1
 service:
-    db:
-        image: mysql
-        networks: host
-    redis:
-        image: redis
+    test:
+        image: python
         port: 6379
