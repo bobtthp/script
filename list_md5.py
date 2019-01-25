@@ -1,9 +1,11 @@
+#-*- coding:utf-8 -*-
 import datetime
 import sys
 from ruamel import yaml
 import json
 import hashlib
 import os
+import chardet
 conf = 'md5_list.json'
 def Time(mon=0):
 	month = int(datetime.datetime.today().strftime("%m"))
@@ -26,6 +28,7 @@ def decorator(info):
 		print info
 		print 'stop====>'
 	return wrap
+
 
 def Md5sum(f):
     md5 = hashlib.md5()
@@ -51,7 +54,7 @@ def Dict_file(Dir):
 
 def Md5ToFile(D,version):
 	if os.path.exists(conf):
-		with open(conf,'r') as f:
+		with open(conf,'rb') as f:
 			New_Dict = D
 			del_list = []
 			Dict = json.load(f)
@@ -75,7 +78,7 @@ def Md5ToFile(D,version):
 				for File in del_list:
 					Dict['md5_list'].pop(File)
 		try:
-			with open(conf,'w') as f:
+			with open(conf,'wb') as f:
                         	json.dump(Dict,f,indent=4)
                 	return 0
         	except Exception as E:
@@ -87,12 +90,34 @@ def Md5ToFile(D,version):
 		Dict['version'] = version
 		Dict['last_version'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 		try:
-			with open(conf,'w') as f:
+			with open(conf,'wb') as f:
                         	json.dump(Dict,f,indent=4)
                 	return 0
         	except Exception as E:
                 	print E
 
+def unicode(strs):
+	'''strs to unicode '''
+        charset = ['utf-8','gbk']
+        try:
+                strs = strs.decode(charset[0])
+        except UnicodeDecodeError:
+                strs = strs.decode(charset[1])
+        return strs
+def DealDict(Dict):
+	'''reslove charset,deal not ascii'''
+	try:
+		gbk_dict = {}
+		for key in Dict:
+			if chardet.detect(key)['encoding'] != 'ascii':
+				gbk_dict[key] = Dict[key]
+	except Execption as E:
+		print E
+	finally:
+		for keys in gbk_dict:
+			Dict.pop(keys)
+	return Dict,gbk_dict
 if __name__ == '__main__':
-        D = Dict_file(sys.argv[1])
-	Md5ToFile(D,sys.argv[2])
+        Dict = Dict_file(sys.argv[1])
+	Dict,GBK_Dict = DealDict(Dict)
+	#Md5ToFile(Dict,sys.argv[2])
