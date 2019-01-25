@@ -62,6 +62,7 @@ def Md5ToFile(D,version):
 			Dict['update_version'] += 1
 			Dict['update'] = []
 			Dict['last_version'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+			Dict['charset_unusual_file'] = GBK_Dict
 			for File in Dict['md5_list']:
 				if File not in New_Dict:
 					Dict['update'].append(File + ':' + Dict['md5_list'][File])
@@ -88,6 +89,7 @@ def Md5ToFile(D,version):
 		Dict['md5_list'] = D
 		Dict['update_version'] = 1
 		Dict['version'] = version
+		Dict['charset_unusual_file'] = GBK_Dict
 		Dict['last_version'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 		try:
 			with open(conf,'wb') as f:
@@ -96,7 +98,7 @@ def Md5ToFile(D,version):
         	except Exception as E:
                 	print E
 
-def unicode(strs):
+def to_unicode(strs):
 	'''strs to unicode '''
         charset = ['utf-8','gbk']
         try:
@@ -108,16 +110,19 @@ def DealDict(Dict):
 	'''reslove charset,deal not ascii'''
 	try:
 		gbk_dict = {}
+		org_keys = []
 		for key in Dict:
 			if chardet.detect(key)['encoding'] != 'ascii':
-				gbk_dict[key] = Dict[key]
-	except Execption as E:
+				org_keys.append(key)
+				gbk_key = to_unicode(key)
+				gbk_dict[gbk_key] = Dict[key]
+	except Exception as E:
 		print E
 	finally:
-		for keys in gbk_dict:
+		for keys in org_keys:
 			Dict.pop(keys)
 	return Dict,gbk_dict
 if __name__ == '__main__':
         Dict = Dict_file(sys.argv[1])
 	Dict,GBK_Dict = DealDict(Dict)
-	#Md5ToFile(Dict,sys.argv[2])
+	Md5ToFile(Dict,sys.argv[2])
