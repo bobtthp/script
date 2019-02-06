@@ -31,16 +31,18 @@ def decorator(info):
 
 
 def Md5sum(f):
-    md5 = hashlib.md5()
-    if os.path.isdir(f):
-        print '-warning: it is dir, please add "-d" '
-    else:
-        f = open(f,'rb')
-        md5.update(f.read())
-        f.close()
+	'''return md5 for file'''
+    	md5 = hashlib.md5()
+    	if os.path.isdir(f):
+        	print '-warning: it is dir, please add "-d" '
+    	else:
+        	f = open(f,'rb')
+        	md5.update(f.read())
+        	f.close()
         return md5.hexdigest()
 
 def Dict_file(Dir):
+    '''walk dir and return dict for file and md5'''
     if not os.path.isdir(Dir):
         print '-warning: please add args for dir'
     else:
@@ -53,6 +55,7 @@ def Dict_file(Dir):
         return file_dict
 
 def Md5ToFile(D,version):
+	'''write update file infomations into md5.json'''
 	if os.path.exists(conf):
 		with open(conf,'rb') as f:
 			New_Dict = D
