@@ -1,0 +1,43 @@
+#!/bin/bash
+kafka_home=/opt/kafka/kafka_2.12
+
+  function kafka_start() {
+        check
+        if [[ $? == 1 ]]
+          then echo server has started !
+        else
+           for i in {1..3}
+             do 
+               $kafka_home/kafka_$i/bin/kafka-server-start.sh -daemon $kafka_home/kafka_$i/config/server.properties 
+               echo kafka[$i] start
+               sleep 2
+             done
+        fi
+  } 
+  function kafka_stop() {
+    for i in {1..3}
+      do 
+        $kafka_home/kafka_$i/bin/kafka-server-stop.sh 
+        sleep 2
+      done
+  } 
+  function check() {
+    res=`ss -nltup |grep 909 | wc -l`
+    if [[  $res == 3 ]]
+      then return 1
+    else
+      return 0
+    fi
+  }
+if [[ $1 == "status" ]]
+  then ss -nltup |grep 909
+elif [[ $1 == "start" ]]
+  then
+    kafka_start 
+elif [[ $1 == "stop" ]] 
+  then
+    kafka_stop
+else
+   check
+   echo $?
+fi
